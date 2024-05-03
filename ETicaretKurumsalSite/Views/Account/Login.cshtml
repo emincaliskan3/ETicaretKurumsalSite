@@ -1,0 +1,116 @@
+﻿@model EntityLayer.Customer
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bgcolor">
+    <div class="container">
+        <input type="checkbox" id="flip">
+        <div class="cover">
+            <div class="front">
+                <img src="/LoginRegister/images/frontImg.jpg" alt="">
+                <div class="text">
+                    <span class="text-1">Her yeni arkadaş yeni bir maceradır</span>
+                    <span class="text-2">Bağlantı kurmaya başlayalım</span>
+                </div>
+            </div>
+            <div class="back">
+                <img class="backImg" src="/LoginRegister/images/backImg.jpg" alt="">
+                <div class="text">
+                    <span class="text-1">Bir adımla uzun bir yolculuğu tamamla</span>
+                    <span class="text-2">Başlamak için hazırız</span>
+                </div>
+            </div>
+            
+        </div>
+        <a href="/">
+            <img src="~/ministore-1.0.0/images/main-logo.png" />
+            </a>
+        
+        <div class="forms">
+
+            <div class="form-content">
+
+               
+                <div class="login-form">
+                    @Html.Raw(@TempData["Message"])
+                    <div class="title">Giriş</div>
+                    
+                    <form asp-controller="Account" asp-action="Login">
+                        
+                        <div class="input-boxes">
+                            
+                            <div class="input-box">
+                                
+                                <i class="fas fa-envelope"></i>
+                                <input class="form-control" id="kinputEmail" type="email" name="kemail" required placeholder="name@example.com">
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                <input class="form-control" id="kinputPassword" type="password" name="kpassword" required placeholder="Şifre">
+                            </div>
+                            <div class="text"><a href="#">Şifreni mi unuttun?</a></div>
+                            
+                            <div class="button input-box">
+                                <input type="submit" value="Giriş Yap">
+                            </div>
+                            <div class="text sign-up-text">Hesabın yok mu? <label for="flip">Kaydol</label></div>
+                        </div>
+                    </form>
+                    
+                </div>
+                <div class="signup-form">
+                    <div class="title">Kayıt</div>
+                    <form asp-controller="Account" asp-action="Register">
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-user"></i>
+                                <input asp-for="Name" required type="text" class="form-control" id="nameInput" placeholder="Ad">
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-user"></i>
+                                <input asp-for="Surname" required type="text" class="form-control" id="surnameInput" placeholder="Soyad">
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-envelope"></i>
+                                <input asp-for="Email" required type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-phone"></i>
+                                <input asp-for="Phone" required type="tel" class="form-control" id="phoneInput" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Telefon Numarası (örn: 555-555-5555)" title="Telefon numaranızı bu formatta giriniz: 555-555-5555">
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                <input asp-for="Password" required type="password" class="form-control" id="passwordInput" placeholder="Şifre">
+                            </div>
+                            <div class="button input-box">
+                                <input type="submit" value="Kaydol">
+                            </div>
+                            <div class="text sign-up-text">Hesabın var mı? <label for="flip">Giriş yap</label></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<link href="~/LoginRegister/style.css" rel="stylesheet" />
+<link href="~/loginregister/bootstrap.min.css" rel="stylesheet" />
+<style>
+    .bgcolor {
+        
+        background: #7AACC2; 
+        
+    }
+
+</style>

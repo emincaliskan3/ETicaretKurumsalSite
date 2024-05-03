@@ -1,0 +1,65 @@
+﻿@model Entities.Order
+
+@{
+    ViewData["Title"] = "Sipariş Düzenle";
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreateDate" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Surname" class="control-label"></label>
+                <input asp-for="Surname" class="form-control" />
+                <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CardNo" class="control-label"></label>
+                <input asp-for="CardNo" class="form-control" />
+                <span asp-validation-for="CardNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CVV" class="control-label"></label>
+                <input asp-for="CVV" class="form-control" />
+                <span asp-validation-for="CVV" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderDetail" class="control-label"></label>
+                <input asp-for="OrderDetail" class="form-control"  />
+                <span asp-validation-for="OrderDetail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Kaydet" class="btn btn-primary mt-3" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-outline-success mt-3">Listeye Dön</a>
+</div>
+
+

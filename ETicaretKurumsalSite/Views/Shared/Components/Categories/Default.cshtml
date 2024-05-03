@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Category>
+
+<li class="nav-item row text-nowrap">
+
+    @foreach (var item in Model.Where(x => x.IsActive))
+    {
+            <div class="col">
+                
+                    <a class="nav-link me-4" href="/Categories/Index/@item.Id">@item.Name</a>
+                
+            </div>
+    }
+    
+</li>
+

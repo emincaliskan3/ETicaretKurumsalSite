@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+  
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Paneli</h1>
+        <table>
+            <tr>
+                <th>Veri Tipi</th>
+                <th>Toplam Adet</th>
+            </tr>
+            <tr>
+                <td>Ürün</td>
+                <td>@ViewBag.TotalProductCount</td>
+            </tr>
+            <tr>
+                <td>Personel</td>
+                <td>@ViewBag.TotalUserCount</td>
+            </tr>
+            <tr>
+                <td>Müşteri</td>
+                <td>@ViewBag.TotalCustomerCount</td>
+            </tr>
+            <tr>
+                <td>Slide</td>
+                <td>@ViewBag.TotalSlideCount</td>
+            </tr>
+            <tr>
+                <td>Kategori</td>
+                <td>@ViewBag.TotalCategoryCount</td>
+            </tr>
+            <tr>
+                <td>Sipariş</td>
+                <td>@ViewBag.TotalOrderCount</td>
+            </tr>
+        </table>
+
+        <div class="dropdown" style="display: inline-block;">
+            <button class="dropbtn" onclick="toggleDropdown()">Ürün Stok Durumu</button>
+            <div class="dropdown-content" id="dropdownContent">
+                <table>
+                    <tr>
+                        <th>Ürün Adı</th>
+                        <th>Stok Miktarı</th>
+                    </tr>
+                    @foreach (var item in ViewBag.ProductStocks)
+                    {
+                        <tr>
+                            <td>@item.Key</td>
+                            <td>@item.Value</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="dropdown" style="display: inline-block;">
+            <button class="dropbtn" onclick="toggleDropdownCustomers()">Müşteriler</button>
+            <div class="dropdown-content" id="dropdownContentCustomers">
+                <table>
+                    <tr>
+                        <th>Müşterinin Adı ve Soyadı</th>
+                    </tr>
+                    @foreach (var item in ViewBag.CustomersInfo)
+                    {
+                        <tr>
+                            <td>@item.Value</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="dropdown" style="display: inline-block;">
+            <button class="dropbtn" onclick="toggleDropdownCustomers()">Personeller</button>
+            <div class="dropdown-content" id="dropdownContentCustomers">
+                <table>
+                    <tr>
+                        <th>Personelin Adı ve Soyadı</th>
+                    </tr>
+                    @foreach (var item in ViewBag.UsersInfo)
+                    {
+                        <tr>
+                            <td>@item.Value</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="dropdown" style="display: inline-block;">
+            <button class="dropbtn" onclick="toggleDropdownCategories()">Kategoriler</button>
+            <div class="dropdown-content" id="dropdownContentCategories">
+                <table>
+                    <tr>
+                        <th>Kategori Adı</th>
+                        <th>Ürün Sayısı</th>
+                    </tr>
+                    @foreach (var categoryProductCount in ViewBag.CategoryProductCounts)
+                    {
+                        <tr>
+                            <td>@categoryProductCount.Key</td>
+                            <td>@categoryProductCount.Value</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            var dropdownContent = document.getElementById("dropdownContent");
+            if (dropdownContent.style.display === "none") {
+                dropdownContent.style.display = "block";
+            } else {
+                dropdownContent.style.display = "none";
+            }
+        }
+
+        function toggleDropdownCategories() {
+            var dropdownContentCategories = document.getElementById("dropdownContentCategories");
+            if (dropdownContentCategories.style.display === "none") {
+                dropdownContentCategories.style.display = "block";
+            } else {
+                dropdownContentCategories.style.display = "none";
+            }
+        }
+
+    </script>
+</body>
+</html>
+<style>
+   
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .dropdown {
+        display: inline-block;
+        margin-right: 10px; 
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        z-index: 1;
+        padding: 10px;
+        width: 300px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: black;
+    }
+
+    .dropbtn {
+        background-color: gray;
+        cursor: pointer;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        width: 270px;
+        text-align: left;
+        color: #fff;
+        margin-bottom: 10px; 
+        display: block; 
+    }
+
+        .dropbtn:focus {
+            outline: none;
+        }
+
+        .dropbtn:hover {
+            background-color: #f9f9f9;
+        }
+
+    .dropdown-content table {
+        width: 100%;
+    }
+
+    .dropdown-content th, .dropdown-content td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .dropdown-content th {
+        background-color: #f2f2f2;
+    }
+
+    .dropdown-content th {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .dropdown-content tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>

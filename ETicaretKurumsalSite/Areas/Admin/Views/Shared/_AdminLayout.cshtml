@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Ministore</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="~/admintema/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="sb-nav-fixed">
+    <partial name="_AdminUstMenu" />
+    <div id="layoutSidenav">
+        <partial name="_AdminSolMenu" />
+        <div id="layoutSidenav_content">
+            <main role="main" class="pb-3">
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">@ViewData["Title"]</h1>
+
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="~/admintema/js/datatables-simple-demo.js"></script>
+    <script src="~/admintema/js/scripts.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

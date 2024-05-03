@@ -1,0 +1,26 @@
+﻿@model Category
+
+
+<br />
+<br />
+<br />
+<br />
+<section id="mobile-products" class="product-store position-relative ">
+    <div class="container">
+<div class="row row-cols-4">
+    
+    <partial name="_PartialProductView" model="Model.Products">
+
+                
+</div>
+    </div>
+   
+</section>
+    
+<style>
+    .product-card .image-holder img {
+        object-fit: cover; /* Resmi enlemesine doldurmak için */
+        width: 100%; /* Resmin genişliğini %100 olarak ayarlamak */
+        height: 100%; /* Resmin yüksekliğini %100 olarak ayarlamak */
+    }
+</style>

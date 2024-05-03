@@ -1,0 +1,54 @@
+﻿@model IEnumerable<EntityLayer.Slide>
+
+@{
+    ViewData["Title"] = "Slidelar";
+}
+
+
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-primary">Yeni ekle</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Url)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    <img src="/Images/@item.Image" height="30" alt="" />
+                </td>
+                <td>
+
+                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">Düzenle</a>
+                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@item.Id">Detay</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id">Sil</a>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

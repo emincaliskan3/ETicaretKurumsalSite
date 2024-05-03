@@ -1,0 +1,121 @@
+﻿@using ETicaretKurumsalSite.ExtensionMethods
+
+
+
+
+<header id="header" class="site-header header-scrolled position-fixed text-black bg-light">
+    <nav id="header-nav" class="navbar navbar-expand-lg px-3 mb-3">
+
+        <div class="container-fluid">
+           
+            <a class="navbar-brand" href="/">
+                <img src="~/ministore-1.0.0/images/main-logo.png" />
+            </a>
+            <button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
+                <div class="offcanvas-header px-4 pb-0">
+                    <a class="navbar-brand" href="/">
+                        <img src="/ministore-1.0.0/images/main-logo.png" class="logo">
+                    </a>
+                    <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul id="navbar" class="navbar-nav text-uppercase justify-content-end align-items-center flex-grow-1 pe-3">
+                        
+                        
+                       
+                        <li class="nav-item">
+                            @await Component.InvokeAsync("Categories")
+                        </li>
+
+                        <form asp-controller="Products" asp-action="Search" method="get" class="row gx-2 align-items-center mb-3 mb-lg-0 me-lg-3 searchinput" role="search">
+                            <div class="col-auto">
+                                <label class="visually-hidden" for="searchQuery">Ara</label>
+                                <input name="q" type="search" class="form-control form-control-dark" id="searchQuery" placeholder="Ara..." aria-label="Search">
+                            </div>
+                            
+                        </form>
+                       @if (Context.Session.GetInt32("IsLoggedIn") == 1) // eğer kullanıcı giriş yapmışsa bu değer gelir
+                        {
+                            <div>
+                                <div class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-person-fill"></i>
+                                        
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="#!">Ayarlar</a></li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">çıkış </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="dropdown">
+                                @{
+                                    Cart cart = Context.Session.GetJson<Cart>("Cart");
+                                    if (cart != null)
+                                    {
+                                        <a class="nav-link px-2 link-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi-cart-fill me-1"></i> Sepet
+                                            <span class="badge text-white ms-1 rounded-pill" style="background-color: #7AACC2;">@cart.Products.Count</span>
+
+                                        </a>
+                                        <ul class="dropdown-menu ">
+
+                                            @foreach (var item in cart.Products)
+                                            {
+                                                <li>
+                                                    <a class="dropdown-item" href="/Products/Detail/@item.Product.Id">
+                                                        <img src="/Images/@item.Product.Image" alt="" width="34" />
+                                                        @item.Product.Name
+                                                    </a>
+                                                </li>
+                                            }
+
+                                            <li class="text-center"><a class="btn btn-primary mt-3 " asp-controller="Cart" asp-action="Index">Sepete Git</a></li>
+
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-outline-dark" href="/Cart">
+                                            <i class="bi-cart-fill me-1"></i>
+                                            Sepet
+                                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                                        </a>
+                                    }
+                                }
+
+                            </div>
+                      }
+                      else
+                        {
+                            <a asp-controller="Account" asp-action="Login" type="button" class="btn btn-outline-dark me-2 bi bi-person-fill">GIRIS</a>
+                        }
+                       
+                        
+                          
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+       
+    </nav>
+</header>
+
+<style>
+    
+        .navbar-nav li {
+    line-height: 1.5; /* Li elemanları arasındaki boşluğu azaltır */
+}
+
+.nav-item.two-words {
+    flex-wrap: nowrap; /* Kelimelerin alta kaymasını önler */
+    align-items: center; /* İçeriği dikey olarak ortalar */
+}
+    
+</style>
