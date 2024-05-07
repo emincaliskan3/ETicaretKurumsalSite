@@ -46,7 +46,7 @@
                                         <span>@Context.Session.GetString("kullanici") @Context.Session.GetString("soyad")</span>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="/Account/Index"><i class="bi bi-gear-fill"></i> Ayarlar</a></li>
+                                        <li><a class="dropdown-item" href="/Account/Index"><i class="bi bi-gear-fill"></i> Hesap Ayarları</a></li>
                                         <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</a></li>
                                     </ul>
                                 </div>
@@ -63,7 +63,7 @@
                                             <span class="badge text-white ms-1 rounded-pill" style="background-color: #7AACC2;">@cart.Products.Count</span>
 
                                         </a>
-                                        <ul class="dropdown-menu ">
+                                        <ul class="dropdown-menu dropdown-menu-end ">
 
                                             @foreach (var item in cart.Products)
                                             {
@@ -128,6 +128,10 @@
     flex-wrap: nowrap; /* Kelimelerin alta kaymasını önler */
     align-items: center; /* İçeriği dikey olarak ortalar */
 }
+
+    .dropdown-item {
+        text-transform: none;
+    }
 
     
 </style>
