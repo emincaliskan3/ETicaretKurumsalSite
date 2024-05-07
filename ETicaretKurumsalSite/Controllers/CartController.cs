@@ -22,7 +22,7 @@ namespace ETicaretKurumsalSite.Controllers
         {
             var model = new CartViewModel();
             model.Cart = GetCart();
-            return View(model); // sepet sayfasına sepetteki ürünleri gönderiyoruz
+            return View(model);
         }
         [HttpPost]
         public IActionResult Index(CartViewModel cartViewModel)

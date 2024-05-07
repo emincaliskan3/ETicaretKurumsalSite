@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DataAccessLayer;
 using EntityLayer;
 using Microsoft.AspNetCore.Authorization;
+using ServiceLayer;
 
 namespace ETicaretKurumsalSite.Areas.Admin.Controllers
 {
     [Area("Admin"), Authorize(Policy = "UserPolicy")]
     public class ContactsController : Controller
     {
-        private readonly DatabaseContext _context;
+        private readonly IContactService _contactService;
 
-        public ContactsController(DatabaseContext context)
+        public ContactsController(IContactService contactService)
         {
-            _context = context;
+            _contactService = contactService;
         }
 
         // GET: Admin/Contacts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Contacts.ToListAsync());
+            var contacts = await _contactService.GetContactsAsync();
+            return View(contacts);
         }
 
         // GET: Admin/Contacts/Details/5
@@ -30,8 +30,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contacts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var contact = await _contactService.GetContactAsync(id.Value);
             if (contact == null)
             {
                 return NotFound();
@@ -47,16 +46,13 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         }
 
         // POST: Admin/Contacts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Email,Phone,Message")] Contact contact)
+        public async Task<IActionResult> Create(Contact contact)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contact);
-                await _context.SaveChangesAsync();
+                await _contactService.AddContactAsync(contact);
                 return RedirectToAction(nameof(Index));
             }
             return View(contact);
@@ -70,7 +66,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contacts.FindAsync(id);
+            var contact = await _contactService.GetContactAsync(id.Value);
             if (contact == null)
             {
                 return NotFound();
@@ -79,11 +75,9 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         }
 
         // POST: Admin/Contacts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Email,Phone,Message")] Contact contact)
+        public async Task<IActionResult> Edit(int id, Contact contact)
         {
             if (id != contact.Id)
             {
@@ -94,12 +88,11 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(contact);
-                    await _context.SaveChangesAsync();
+                    await _contactService.UpdateContactAsync(contact);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!ContactExists(contact.Id))
+                    if (!await _contactService.ContactExists(id))
                     {
                         return NotFound();
                     }
@@ -121,8 +114,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contacts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var contact = await _contactService.GetContactAsync(id.Value);
             if (contact == null)
             {
                 return NotFound();
@@ -136,19 +128,14 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contact = await _context.Contacts.FindAsync(id);
-            if (contact != null)
-            {
-                _context.Contacts.Remove(contact);
-            }
-
-            await _context.SaveChangesAsync();
+            await _contactService.DeleteContactAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ContactExists(int id)
+        private async Task<bool> ContactExistsAsync(int id)
         {
-            return _context.Contacts.Any(e => e.Id == id);
+            return await _contactService.ContactExists(id);
         }
+
     }
 }

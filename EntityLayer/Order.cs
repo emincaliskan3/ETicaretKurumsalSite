@@ -6,7 +6,7 @@ namespace Entities
     public class Order : IEntity
     {
         public int Id { get; set; }
-        // müşteri bilgileri
+
         [Display(Name = "Ad"), StringLength(50), Required]
         public string Name { get; set; }
         [Display(Name = "Soyad"), StringLength(50), Required]

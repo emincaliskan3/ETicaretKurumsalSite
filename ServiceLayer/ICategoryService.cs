@@ -4,12 +4,10 @@ namespace ServiceLayer
 {
     public interface ICategoryService
     {
-        List<Category> GetCategories();
-        Category GetCategory(int id);
-        Category GetCategoryByProducts(int id);
-        void Add(Category category);
-        void Update(Category category);
-        void Delete(int id);
-        int Save();
+        Task<List<Category>> GetCategoriesAsync();
+        Task<Category> GetCategoryAsync(int id);
+        Task AddCategoryAsync(Category category);
+        Task UpdateCategoryAsync(Category category);
+        Task DeleteCategoryAsync(int id);
     }
 }

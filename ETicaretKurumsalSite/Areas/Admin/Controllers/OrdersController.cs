@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLayer;
+using ServiceLayer;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
 
@@ -9,17 +9,18 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
     [Area("Admin"), Authorize(Policy = "UserPolicy")]
     public class OrdersController : Controller
     {
-        private readonly DatabaseContext _context;
+        private readonly IOrderService _orderService;
 
-        public OrdersController(DatabaseContext context)
+        public OrdersController(IOrderService orderService)
         {
-            _context = context;
+            _orderService = orderService;
         }
 
         // GET: Admin/Orders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Orders.ToListAsync());
+            var orders = await _orderService.GetOrdersAsync();
+            return View(orders);
         }
 
         // GET: Admin/Orders/Details/5
@@ -30,8 +31,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var order = await _orderService.GetOrderAsync(id.Value);
             if (order == null)
             {
                 return NotFound();
@@ -47,16 +47,13 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         }
 
         // POST: Admin/Orders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Surname,Email,Phone,Address,OrderDetail")] Order order)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
+                await _orderService.AddOrderAsync(order);
                 return RedirectToAction(nameof(Index));
             }
             return View(order);
@@ -70,7 +67,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _orderService.GetOrderAsync(id.Value);
             if (order == null)
             {
                 return NotFound();
@@ -79,8 +76,6 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         }
 
         // POST: Admin/Orders/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Email,Phone,Address,OrderDetail")] Order order)
@@ -94,12 +89,11 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
+                    await _orderService.UpdateOrderAsync(order);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!await _orderService.OrderExistsAsync(order.Id))
                     {
                         return NotFound();
                     }
@@ -121,8 +115,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var order = await _orderService.GetOrderAsync(id.Value);
             if (order == null)
             {
                 return NotFound();
@@ -136,19 +129,8 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            if (order != null)
-            {
-                _context.Orders.Remove(order);
-            }
-
-            await _context.SaveChangesAsync();
+            await _orderService.DeleteOrderAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool OrderExists(int id)
-        {
-            return _context.Orders.Any(e => e.Id == id);
         }
     }
 }

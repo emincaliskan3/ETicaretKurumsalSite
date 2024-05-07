@@ -8,47 +8,46 @@ namespace ServiceLayer
     {
         private readonly DatabaseContext _context;
 
-
         public CategoryService(DatabaseContext context)
         {
             _context = context;
         }
 
-        public void Add(Category category)
+        public async Task AddCategoryAsync(Category category)
         {
             _context.Categories.Add(category);
+            await SaveAsync();
         }
 
-        public void Delete(int id)
+        public async Task DeleteCategoryAsync(int id)
         {
-            var kayit = GetCategory(id);
-            _context.Categories.Remove(kayit);
-
+            var category = await GetCategoryAsync(id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                await SaveAsync();
+            }
         }
 
-        public List<Category> GetCategories()
+        public async Task<Category> GetCategoryAsync(int id)
         {
-            return _context.Categories.ToList();
+            return await _context.Categories.FindAsync(id);
         }
 
-        public Category? GetCategory(int id)
+        public async Task<List<Category>> GetCategoriesAsync()
         {
-            return _context.Categories.Find(id);
+            return await _context.Categories.ToListAsync();
         }
 
-        public Category GetCategoryByProducts(int id)
-        {
-            return _context.Categories.Include(x => x.Products).FirstOrDefault(x => x.Id == id);
-        }
-
-        public int Save()
-        {
-            return _context.SaveChanges();
-        }
-
-        public void Update(Category category)
+        public async Task UpdateCategoryAsync(Category category)
         {
             _context.Categories.Update(category);
+            await SaveAsync();
+        }
+
+        private async Task<int> SaveAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
     }
 }

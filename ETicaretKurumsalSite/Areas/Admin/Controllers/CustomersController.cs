@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DataAccessLayer;
 using EntityLayer;
 using Microsoft.AspNetCore.Authorization;
+using ServiceLayer;
 
 namespace ETicaretKurumsalSite.Areas.Admin.Controllers
 {
-    [Area("Admin"), Authorize(Policy = "AdminPolicy")]
+    [Area("Admin"), Authorize(Policy = "UserPolicy")]
     public class CustomersController : Controller
     {
-        private readonly DatabaseContext _context;
+        private readonly ICustomerService _customerService;
 
-        public CustomersController(DatabaseContext context)
+        public CustomersController(ICustomerService customerService)
         {
-            _context = context;
+            _customerService = customerService;
         }
 
         // GET: Admin/Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            var customers = await _customerService.GetCustomersAsync();
+            return View(customers);
         }
 
         // GET: Admin/Customers/Details/5
@@ -30,8 +30,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _customerService.GetCustomerAsync(id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -47,15 +46,13 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         }
 
         // POST: Admin/Customers/Create
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Email,Phone,Password,CreateDate")] Customer customer)
+        public async Task<IActionResult> Create(Customer customer)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+                await _customerService.AddCustomerAsync(customer);
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -69,7 +66,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _customerService.GetCustomerAsync(id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -78,11 +75,9 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         }
 
         // POST: Admin/Customers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Email,Phone,Password,CreateDate")] Customer customer)
+        public async Task<IActionResult> Edit(int id, Customer customer)
         {
             if (id != customer.Id)
             {
@@ -93,12 +88,11 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
+                    await _customerService.UpdateCustomerAsync(customer);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!CustomerExists(customer.Id))
+                    if (!await _customerService.CustomerExists(id))
                     {
                         return NotFound();
                     }
@@ -120,8 +114,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var customer = await _customerService.GetCustomerAsync(id.Value);
             if (customer == null)
             {
                 return NotFound();
@@ -135,19 +128,8 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer != null)
-            {
-                _context.Customers.Remove(customer);
-            }
-
-            await _context.SaveChangesAsync();
+            await _customerService.DeleteCustomerAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.Id == id);
         }
     }
 }

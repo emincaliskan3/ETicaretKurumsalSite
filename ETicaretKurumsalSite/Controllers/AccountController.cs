@@ -113,7 +113,7 @@ namespace ETicaretKurumsalSite.Controllers
                     _context.Update(updatedCustomer);
                     await _context.SaveChangesAsync();
 
-                    // Güncellenmiş bilgileri oturum verilerine yazma
+
                     HttpContext.Session.SetString("kullanici", updatedCustomer.Name);
                     HttpContext.Session.SetString("soyad", updatedCustomer.Surname);
                     HttpContext.Session.SetString("hesap", updatedCustomer.Email);

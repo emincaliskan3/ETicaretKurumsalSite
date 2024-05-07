@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DataAccessLayer;
-using EntityLayer;
-using ETicaretKurumsalSite.Tools;
 using Microsoft.AspNetCore.Authorization;
+using ETicaretKurumsalSite.Tools;
+using ServiceLayer;
+using EntityLayer;
+using Microsoft.EntityFrameworkCore;
 
 namespace ETicaretKurumsalSite.Areas.Admin.Controllers
 {
     [Area("Admin"), Authorize(Policy = "AdminPolicy")]
     public class CategoriesController : Controller
     {
-        private readonly DatabaseContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(DatabaseContext context)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
         // GET: Admin/Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            var categories = await _categoryService.GetCategoriesAsync();
+            return View(categories);
         }
 
         // GET: Admin/Categories/Details/5
@@ -31,8 +32,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await _categoryService.GetCategoryAsync(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -48,7 +48,6 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         }
 
         // POST: Admin/Categories/Create
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category, IFormFile? Image)
@@ -56,8 +55,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 category.Image = await FileHelper.FileLoaderAsync(Image);
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                await _categoryService.AddCategoryAsync(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -71,7 +69,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _categoryService.GetCategoryAsync(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -80,7 +78,6 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         }
 
         // POST: Admin/Categories/Edit/5
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Category category, IFormFile? Image)
@@ -95,10 +92,9 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 try
                 {
                     if (Image is not null)
-
                         category.Image = await FileHelper.FileLoaderAsync(Image);
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+
+                    await _categoryService.UpdateCategoryAsync(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,8 +120,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await _categoryService.GetCategoryAsync(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -139,19 +134,14 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-            }
-
-            await _context.SaveChangesAsync();
+            await _categoryService.DeleteCategoryAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            var category = _categoryService.GetCategoryAsync(id).Result;
+            return category != null;
         }
     }
 }

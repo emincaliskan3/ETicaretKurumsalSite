@@ -26,6 +26,12 @@ builder.Services.AddAuthorization(x =>
 builder.Services.AddDbContext<DatabaseContext>();
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ISlideService, SlideService>();
+builder.Services.AddScoped<ISubscribeService, SubscribeService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 var app = builder.Build();
 

@@ -127,7 +127,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="Order.Phone" class="form-label" style="color: #7AACC2; font-weight: bold;"><i class="bi bi-telephone-fill"></i> Telefon</label>
-                                <input asp-for="Order.Phone" id="Order_Phone" type="tel" required class="form-control" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" placeholder="Telefon Numarası (örn: 555-555-5555)" title="Telefon numaranızı bu formatta giriniz: 555-555-5555">
+                                <input asp-for="Order.Phone" id="Order_Phone" type="tel" required class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Telefon Numarası (örn: 555-555-5555)" title="Telefon numaranızı bu formatta giriniz: 555-555-5555">
                                 <span asp-validation-for="Order.Phone" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
@@ -192,8 +192,7 @@
     @foreach (var item in Model.Cart.Products)
     {
         <text>
-                            var product = {
-                ÜrünNumarası: '@item.Product.Id',
+                var product = {
                 ÜrünAdı: '@Html.Raw(item.Product.Name)',
                 Fiyat: '@item.Product.Price',
                 Miktar: '@item.Quantity'

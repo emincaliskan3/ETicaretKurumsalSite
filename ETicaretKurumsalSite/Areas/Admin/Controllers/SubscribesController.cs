@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLayer;
+using ServiceLayer;
 using EntityLayer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -9,17 +9,18 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
     [Area("Admin"), Authorize(Policy = "UserPolicy")]
     public class SubscribesController : Controller
     {
-        private readonly DatabaseContext _context;
+        private readonly ISubscribeService _subscribeService;
 
-        public SubscribesController(DatabaseContext context)
+        public SubscribesController(ISubscribeService subscribeService)
         {
-            _context = context;
+            _subscribeService = subscribeService;
         }
 
         // GET: Admin/Subscribes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Subscribes.ToListAsync());
+            var subscribes = await _subscribeService.GetSubscribesAsync();
+            return View(subscribes);
         }
 
         // GET: Admin/Subscribes/Details/5
@@ -30,8 +31,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var subscribe = await _context.Subscribes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var subscribe = await _subscribeService.GetSubscribeAsync(id.Value);
             if (subscribe == null)
             {
                 return NotFound();
@@ -46,17 +46,13 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Admin/Subscribes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Email")] Subscribe subscribe)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(subscribe);
-                await _context.SaveChangesAsync();
+                await _subscribeService.AddSubscribeAsync(subscribe);
                 return RedirectToAction(nameof(Index));
             }
             return View(subscribe);
@@ -70,7 +66,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var subscribe = await _context.Subscribes.FindAsync(id);
+            var subscribe = await _subscribeService.GetSubscribeAsync(id.Value);
             if (subscribe == null)
             {
                 return NotFound();
@@ -78,9 +74,6 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             return View(subscribe);
         }
 
-        // POST: Admin/Subscribes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Email")] Subscribe subscribe)
@@ -94,12 +87,11 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(subscribe);
-                    await _context.SaveChangesAsync();
+                    await _subscribeService.UpdateSubscribeAsync(subscribe);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SubscribeExists(subscribe.Id))
+                    if (!await _subscribeService.SubscribeExistsAsync(subscribe.Id))
                     {
                         return NotFound();
                     }
@@ -121,8 +113,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var subscribe = await _context.Subscribes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var subscribe = await _subscribeService.GetSubscribeAsync(id.Value);
             if (subscribe == null)
             {
                 return NotFound();
@@ -131,24 +122,12 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             return View(subscribe);
         }
 
-        // POST: Admin/Subscribes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var subscribe = await _context.Subscribes.FindAsync(id);
-            if (subscribe != null)
-            {
-                _context.Subscribes.Remove(subscribe);
-            }
-
-            await _context.SaveChangesAsync();
+            await _subscribeService.DeleteSubscribeAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SubscribeExists(int id)
-        {
-            return _context.Subscribes.Any(e => e.Id == id);
         }
     }
 }

@@ -1,26 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using DataAccessLayer;
+using ServiceLayer;
 using EntityLayer;
-using ETicaretKurumsalSite.Tools;
 using Microsoft.AspNetCore.Authorization;
+using ETicaretKurumsalSite.Tools;
 
 namespace ETicaretKurumsalSite.Areas.Admin.Controllers
 {
     [Area("Admin"), Authorize(Policy = "UserPolicy")]
     public class SlidesController : Controller
     {
-        private readonly DatabaseContext _context;
+        private readonly ISlideService _slideService;
 
-        public SlidesController(DatabaseContext context)
+        public SlidesController(ISlideService slideService)
         {
-            _context = context;
+            _slideService = slideService;
         }
 
         // GET: Admin/Slides
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Slides.ToListAsync());
+            var slides = await _slideService.GetSlidesAsync();
+            return View(slides);
         }
 
         // GET: Admin/Slides/Details/5
@@ -31,8 +33,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var slide = await _context.Slides
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var slide = await _slideService.GetSlideAsync(id.Value);
             if (slide == null)
             {
                 return NotFound();
@@ -47,7 +48,6 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Slide slide, IFormFile? Image)
@@ -55,8 +55,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 slide.Image = await FileHelper.FileLoaderAsync(Image);
-                _context.Add(slide);
-                await _context.SaveChangesAsync();
+                await _slideService.AddSlideAsync(slide);
                 return RedirectToAction(nameof(Index));
             }
             return View(slide);
@@ -70,14 +69,13 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var slide = await _context.Slides.FindAsync(id);
+            var slide = await _slideService.GetSlideAsync(id.Value);
             if (slide == null)
             {
                 return NotFound();
             }
             return View(slide);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -97,13 +95,11 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                         slide.Image = await FileHelper.FileLoaderAsync(Image);
                     }
 
-
-                    _context.Update(slide);
-                    await _context.SaveChangesAsync();
+                    await _slideService.UpdateSlideAsync(slide);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SlideExists(slide.Id))
+                    if (!await _slideService.SlideExistsAsync(slide.Id))
                     {
                         return NotFound();
                     }
@@ -125,8 +121,7 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var slide = await _context.Slides
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var slide = await _slideService.GetSlideAsync(id.Value);
             if (slide == null)
             {
                 return NotFound();
@@ -135,24 +130,12 @@ namespace ETicaretKurumsalSite.Areas.Admin.Controllers
             return View(slide);
         }
 
-        // POST: Admin/Slides/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var slide = await _context.Slides.FindAsync(id);
-            if (slide != null)
-            {
-                _context.Slides.Remove(slide);
-            }
-
-            await _context.SaveChangesAsync();
+            await _slideService.DeleteSlideAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SlideExists(int id)
-        {
-            return _context.Slides.Any(e => e.Id == id);
         }
     }
 }
