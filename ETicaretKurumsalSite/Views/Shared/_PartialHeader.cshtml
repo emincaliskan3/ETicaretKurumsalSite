@@ -7,12 +7,11 @@
     <nav id="header-nav" class="navbar navbar-expand-lg px-3 mb-3">
 
         <div class="container-fluid">
-           
+
             <a class="navbar-brand" href="/">
                 <img src="~/ministore-1.0.0/images/main-logo.png" />
             </a>
             <button class="navbar-toggler d-flex d-lg-none order-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                
             </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel">
                 <div class="offcanvas-header px-4 pb-0">
@@ -23,9 +22,9 @@
                 </div>
                 <div class="offcanvas-body">
                     <ul id="navbar" class="navbar-nav text-uppercase justify-content-end align-items-center flex-grow-1 pe-3">
-                        
-                        
-                       
+
+
+
                         <li class="nav-item">
                             @await Component.InvokeAsync("Categories")
                         </li>
@@ -35,23 +34,24 @@
                                 <label class="visually-hidden" for="searchQuery">Ara</label>
                                 <input name="q" type="search" class="form-control form-control-dark" id="searchQuery" placeholder="Ara..." aria-label="Search">
                             </div>
-                            
+
                         </form>
-                       @if (Context.Session.GetInt32("IsLoggedIn") == 1) // eğer kullanıcı giriş yapmışsa bu değer gelir
+
+                        @if (Context.Session.GetInt32("IsLoggedIn") == 1) // eğer kullanıcı giriş yapmışsa bu değer gelir
                         {
                             <div>
                                 <div class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-person-fill"></i>
-                                        
+                                        <span>@Context.Session.GetString("kullanici") @Context.Session.GetString("soyad")</span>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="#!">Ayarlar</a></li>
-                                        <li><hr class="dropdown-divider" /></li>
-                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">çıkış </a></li>
+                                        <li><a class="dropdown-item" href="/Account/Index"><i class="bi bi-gear-fill"></i> Ayarlar</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</a></li>
                                     </ul>
                                 </div>
                             </div>
+
 
                             <div class="dropdown">
                                 @{
@@ -90,25 +90,36 @@
                                 }
 
                             </div>
-                      }
-                      else
+                        }
+                        else
                         {
                             <a asp-controller="Account" asp-action="Login" type="button" class="btn btn-outline-dark me-2 bi bi-person-fill">GIRIS</a>
                         }
-                       
-                        
-                          
+
+
+
                     </ul>
                 </div>
             </div>
         </div>
 
-       
+
     </nav>
 </header>
 
+
 <style>
     
+    /* Dropdown menüsünün arka planı beyaz olsun */
+    .dropdown-menu {
+        background-color: #ffffff;
+    }
+
+        /* Dropdown menü öğelerinin arka plan rengini #7AACC2 (mavi tonu) yap */
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #B7D6EC;
+        }
+
         .navbar-nav li {
     line-height: 1.5; /* Li elemanları arasındaki boşluğu azaltır */
 }
@@ -117,5 +128,6 @@
     flex-wrap: nowrap; /* Kelimelerin alta kaymasını önler */
     align-items: center; /* İçeriği dikey olarak ortalar */
 }
+
     
 </style>

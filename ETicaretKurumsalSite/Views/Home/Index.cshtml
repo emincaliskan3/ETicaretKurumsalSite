@@ -8,9 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="author" content="">
-    <meta name="keywords" content="">
-    <meta name="description" content="">
     <link href="~/ministore-1.0.0/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/ministore-1.0.0/style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
@@ -22,6 +19,7 @@
     <script src="~/ministore-1.0.0/js/modernizr.js"></script>
   </head>
   <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" tabindex="0">
+    
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
         <title>Search</title>
@@ -91,12 +89,14 @@
         <path d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z" />
       </symbol>
     </svg>
+    @* -------SLIDER--------*@
     @await Html.PartialAsync("_PartialSlider", Model.Slides)
+    @Html.Raw(TempData["Abone"])
     <button onclick="scrollToTop()" id="scrollTopBtn" title="Sayfanın en üstüne git" class="btn btn-primary border-0 bg-transparent">
         <span class="bi bi-caret-up-square" style="font-size: 24px; vertical-align: middle;"></span>
     </button>
 
-
+    
 
 
 
@@ -161,26 +161,26 @@
         </div>
       </div>
     </section>
+
     @* -------FIRSAT URUNLER --------*@
     <section id="mobile-products" class="product-store position-relative padding-large no-padding-top">
-      <div class="container">
-        <div class="row">
-          <div class="display-header d-flex justify-content-between pb-3">
-            <h2 class="display-7 text-dark text-uppercase">FIRSAT URUNLER</h2>
-            <div class="btn-right">
+        <div class="container">
+            <div class="row">
+                <div class="display-header d-flex justify-content-between pb-3">
+                    <h2 class="display-7 text-dark text-uppercase">FIRSAT URUNLER</h2>
+                    <div class="btn-right">
                         <a href="/Products/Index" class="btn btn-medium btn-normal text-uppercase">MAGAZAYA GIT</a>
-            </div>
-          </div>
+                    </div>
+                </div>
                 <div class="swiper product-swiper">
-            <div class="swiper-wrapper">
+                    <div class="swiper-wrapper">
                         @await Html.PartialAsync("_PartialFirsatUrunler", Model.Products)
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <div class="swiper-pagination position-absolute text-center"></div>
+        <div class="swiper-pagination position-absolute text-center"></div>
     </section>
-
     @* ------- popüler ürünler --------*@
     <section id="smart-watches" class="product-store padding-large position-relative">
         <div class="container">
@@ -201,6 +201,8 @@
         <div class="swiper-pagination position-absolute text-center"></div>
     </section>
 
+    
+
 
     @* -------STATIC--------*@
 
@@ -209,7 +211,7 @@
         <div class="col-md-6 col-sm-12">
           <div class="text-content offset-4 padding-medium">
                     <h3>10% indirim</h3>
-                    <h2 class="display-2 pb-5 text-uppercase text-dark">YENI YIL INDIRIMI</h2>
+                    <h2 class="display-2 pb-5 text-uppercase text-dark">ABONEYE OZEL YENI YIL INDIRIMI</h2>
                     <a asp-controller="Products" asp-action="Index" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">ÜRÜN MAĞAZASI</a>
           </div>
         </div>
@@ -220,7 +222,7 @@
     </section>
 
     
-
+    @* -------ABONE OL FORM--------*@
     <section id="subscribe" class="container-grid padding-large position-relative overflow-hidden">
         <div class="container">
             <div class="row">
@@ -232,10 +234,10 @@
                         </div>
                     </div>
                     <div class="col-md-5 col-sm-12">
-                        <form class="subscription-form validate">
+                        <form action="/Home/Subscribe" method="post" class="subscription-form validate">
                             <div class="input-group flex-wrap">
-                                <input class="form-control btn-rounded-none" type="email" name="EMAIL" placeholder="E-posta adresiniz burada" required="" _mstplaceholder="454337" _msthash="125">
-                                <button class="btn btn-medium btn-primary text-uppercase btn-rounded-none" type="submit" name="subscribe" _msttexthash="154414" _msthash="126">Abone olmak</button>
+                                <input class="form-control btn-rounded-none" type="email" name="Email" placeholder="E-posta adresiniz burada" required="" _mstplaceholder="454337" _msthash="125">
+                                <button class="btn btn-medium btn-primary text-uppercase btn-rounded-none" type="submit" name="Email" _msttexthash="154414" _msthash="126">Abone olmak</button>
                             </div>
                         </form>
                     </div>
@@ -243,6 +245,7 @@
             </div>
         </div>
     </section>
+    @* -------STATIC INSTA LINK--------*@
     <section id="instagram" class="padding-large overflow-hidden no-padding-top">
       <div class="container">
         <div class="row">

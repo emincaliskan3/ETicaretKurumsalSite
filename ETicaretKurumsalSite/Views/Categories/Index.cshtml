@@ -7,20 +7,37 @@
 <br />
 <section id="mobile-products" class="product-store position-relative ">
     <div class="container">
-<div class="row row-cols-4">
-    
-    <partial name="_PartialProductView" model="Model.Products">
+        <div class="row row-cols-4">
 
-                
-</div>
+            <partial name="_PartialProductView" model="Model.Products">
+
+
+        </div>
     </div>
-   
+
 </section>
-    
+
 <style>
-    .product-card .image-holder img {
-        object-fit: cover; /* Resmi enlemesine doldurmak için */
-        width: 100%; /* Resmin genişliğini %100 olarak ayarlamak */
-        height: 100%; /* Resmin yüksekliğini %100 olarak ayarlamak */
+    .product-card {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-holder img {
+        width: 100%;
+        height: 80%;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .card-detail {
+        padding: 15px;
+    }
+
+    .item-price {
+        display: block;
+        margin-top: 10px;
+    }
+
+    .row.row-cols-4 > * {
+        margin-bottom: 20px; /* İstediğiniz boşluk değerini burada ayarlayabilirsiniz */
     }
 </style>

@@ -200,6 +200,11 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -269,6 +274,27 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Slides");
                 });
 
+            modelBuilder.Entity("EntityLayer.Subscribe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Subscribes");
+                });
+
             modelBuilder.Entity("EntityLayer.User", b =>
                 {
                     b.Property<int>("Id")
@@ -327,14 +353,14 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2024, 4, 30, 0, 8, 55, 17, DateTimeKind.Local).AddTicks(4427),
+                            CreateDate = new DateTime(2024, 5, 6, 22, 22, 55, 235, DateTimeKind.Local).AddTicks(8855),
                             Email = "admin@mvckurumsal.net",
                             IsActive = true,
                             IsAdmin = true,
                             Name = "Admin",
                             Password = "Admin123",
                             Surname = "User",
-                            UserGuid = "52dbdf0a-639f-4a8a-9dba-4963b466a592"
+                            UserGuid = "05808f35-c6db-4ae8-a459-04afd296937a"
                         });
                 });
 

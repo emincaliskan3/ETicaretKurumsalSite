@@ -66,6 +66,32 @@ namespace ETicaretKurumsalSite.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public ActionResult Subscribe(Subscribe subscribe)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Subscribes.Add(subscribe);
+                    var sonuc = _context.SaveChanges();
+                    if (sonuc > 0)
+                    {
+                        TempData["Abone"] = "<div class = 'alert alert-success'>Bize Abone Olduðunuz Ýçin Teþekkürler...</div>";
+
+                    }
+                }
+                catch (Exception)
+                {
+
+                    TempData["Abone"] = "<div class = 'alert alert-danger'>Hata Oluþtu! Mesajýnýz Gönderilemedi!</div>";
+                }
+            }
+
+
+            return RedirectToAction("Index");
+        }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

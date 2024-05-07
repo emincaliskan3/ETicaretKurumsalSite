@@ -47,14 +47,20 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-            name: "areas",
-            pattern: "{area:exists}/{controller=Main}/{action=Index}/{id?}"
-          );
+    name: "areas",
+    pattern: "{area:exists}/{controller=Main}/{action=Index}/{id?}"
+);
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
 app.MapControllerRoute(
     name: "custom",
-    pattern: "{customurl?}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{customurl?}/{controller=Home}/{action=Index}/{id?}"
+);
+app.MapControllerRoute(
+    name: "account",
+    pattern: "{controller=Account}/{action=Index}/{id?}"
+);
 
 app.Run();

@@ -1,7 +1,37 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Hesabım";
 }
-
-<h1>Hesabım</h1>
-
+<div class="bg-gray">
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                        <h1 class="card-title text-center" style="color: #7AACC2;">Profilim</h1>
+                    <hr>
+                    <div class="text-center">
+                        <p>Hoş geldiniz, @Context.Session.GetString("kullanici") @Context.Session.GetString("soyad")!</p>
+                        <p>Burada profil bilgilerinizi güncelleyebilir ve hesap ayarlarınızı yönetebilirsiniz.</p>
+                    </div>
+                    <hr>
+                    <div>
+                        <h3>Hesap Bilgileri</h3>
+                        <p><strong>Ad:</strong> @Context.Session.GetString("kullanici")</p>
+                        <p><strong>Soyad:</strong> @Context.Session.GetString("soyad")</p>
+                        <p><strong>Email:</strong> @Context.Session.GetString("hesap")</p>
+                            <p><strong>Telefon:</strong> @Context.Session.GetString("tel")</p>
+                        <p><strong>Şifre:</strong> @Context.Session.GetString("sifre")</p>
+                        <a href="@Url.Action("Update", "Account")" class="btn btn-primary">Profilimi Düzenle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <br /><br /><br /><br />
+</div>

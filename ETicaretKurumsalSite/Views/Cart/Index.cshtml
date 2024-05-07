@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "Sepetim";
 }
+<style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" >
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" >
+</style>
 <div class="bg-gray">
 
 <br />
@@ -11,132 +16,149 @@
 <br />
 
 <div id="cart" class="container ">
-    
-    <div class="row">
         
-        <div class="col-md-8 card">
-            <h1 style="color: #7AACC2;">Sepetim</h1>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Ürün</th>
-                            <th>Miktar</th>
-                            <th>Fiyat</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Cart.Products)
-                        {
-                            <tr>
-                                <td>
-                                    <img src="/Images/@item.Product.Image" alt="" class="img-thumbnail" style="max-height: 100px; max-width: 100px;" />
-                                </td>
-                                <td>
-                                    <a href="/Products/Detail/@item.Product.Id">
-                                        @Html.Raw(item.Product.Name)
-                                    </a>
-                                </td>
-                                <td>@item.Quantity</td>
-                                <td>@item.Product.Price ₺</td>
-                                <td>
-                                    <form asp-action="RemoveFromCart">
-                                        <input type="hidden" name="ProductId" value="@item.Product.Id" />
-                                        <button type="submit" class="bi bi-trash-fill btn btn-danger ">
-                                            Sil
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-md-4 ">
-            <div class="card ">
-                <div class="card-body">
-                    <h5 class="card-title">Sepet Toplamı</h5>
-                    <table class="table">
-                        <tr>
-                            <th>Aratoplam</th>
-                            <td>@Model.Cart.TotalPrice() ₺</td>
-                        </tr>
-                        <tr>
-                            <th>Kargo</th>
-                            <td>@(Model.Cart.TotalPrice() > 2000 ? "Ücretsiz" : "69₺")</td>
-                        </tr>
-                        <tr>
-                            <th>Sipariş Toplamı</th>
-                            <td>@(Model.Cart.TotalPrice() > 999 ? Model.Cart.TotalPrice() : (Model.Cart.TotalPrice() + 69)) ₺</td>
-                        </tr>
-                        
-                    </table>
+        @if (!Model.Cart.Products.Any())
+        {
+            <div class="sepet-body">
+                <div class="sepet-container">
+                    <h1 class="sepet-h1">Sepetinizde Ürün Bulunmamaktadır!</h1>
+                    <a href="/Products/Index" class="button sepet-buton">Alışverişe Devam Et</a>
                 </div>
-                <button type="button" id="confirmCartButton" class="btn btn-primary bi bi-cart-check-fill" style="@(Model.Cart.Products.Any() ? "display:block;" : "display:none;")"> Sepeti Onayla</button>
             </div>
-        </div>
-    </div>
+            
+
+        }
+        else
+        {
+            <div class="row">
+
+                <div class="col-md-8 card">
+                    <h1 style="color: #7AACC2;">Sepetim</h1>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Ürün</th>
+                                    <th>Miktar</th>
+                                    <th>Fiyat</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Cart.Products)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="/Images/@item.Product.Image" alt="" class="img-thumbnail" style="max-height: 100px; max-width: 100px;" />
+                                        </td>
+                                        <td>
+                                            <a href="/Products/Detail/@item.Product.Id">
+                                                @Html.Raw(item.Product.Name)
+                                            </a>
+                                        </td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Product.Price ₺</td>
+                                        <td>
+                                            <form asp-action="RemoveFromCart">
+                                                <input type="hidden" name="ProductId" value="@item.Product.Id" />
+                                                <button type="submit" class="bi bi-trash-fill btn btn-danger ">
+                                                    Sil
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4 ">
+                    <div class="card ">
+                        <div class="card-body">
+                            <h5 class="card-title">Sepet Toplamı</h5>
+                            <table class="table">
+                                <tr>
+                                    <th>Aratoplam</th>
+                                    <td>@Model.Cart.TotalPrice() ₺</td>
+                                </tr>
+                                <tr>
+                                    <th>Kargo</th>
+                                    <td>@(Model.Cart.TotalPrice() > 2000 ? "Ücretsiz" : "69₺")</td>
+                                </tr>
+                                <tr>
+                                    <th>Sipariş Toplamı</th>
+                                    <td>@(Model.Cart.TotalPrice() > 999 ? Model.Cart.TotalPrice() : (Model.Cart.TotalPrice() + 69)) ₺</td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <button type="button" id="confirmCartButton" class="btn btn-primary bi bi-cart-check-fill" style="@(Model.Cart.Products.Any() ? "display:block;" : "display:none;")"> Sepeti Onayla</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+    
 </div>
 
 @if (Model.Cart.Products.Any())
 {
 
 
-    <form asp-action="OrderResult" id="orderForm" style="display:none;">
-        <div class="container mt-3">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title" style="color: #7AACC2; margin-bottom: 20px; font-weight: bold;">Bilgilerinizi Giriniz</h3>
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <input type="hidden" id="orderDetailInput" name="Order.OrderDetail" />
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label asp-for="Order.Name" class="form-label" style="color: #7AACC2; font-weight: bold;">Ad</label>
-                            <input asp-for="Order.Name" id="Order_Name" type="text" class="form-control"  required>
-                            <span asp-validation-for="Order.Name" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="Order.Surname" class="form-label" style="color: #7AACC2; font-weight: bold;">Soyad</label>
-                            <input asp-for="Order.Surname" id="Order_Surname" type="text" class="form-control"  required>
-                            <span asp-validation-for="Order.Surname" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="Order.Phone" class="form-label bi bi-telephone-forward-fill" style="color: #7AACC2; font-weight: bold;"> Telefon</label>
-                            <input asp-for="Order.Phone" id="Order_Phone" type="tel" required class="form-control" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" placeholder="Telefon Numarası (örn: 555-555-5555)" title="Telefon numaranızı bu formatta giriniz: 555-555-5555">
-                            <span asp-validation-for="Order.Phone" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="Order.Email" class="form-label bi bi-envelope-at-fill" style="color: #7AACC2; font-weight: bold;">E-Mail</label>
-                            <input asp-for="Order.Email" id="Order_Email" type="email" class="form-control" placeholder="E-posta adresinizi girin" required>
-                            <span asp-validation-for="Order.Email" class="text-danger"></span>
-                        </div>
-                        <div class="col-12">
-                            <label asp-for="Order.Address" class="form-label" style="color: #7AACC2; font-weight: bold;">Adres</label>
-                            <input asp-for="Order.Address" id="Order_Address" type="text" class="form-control" placeholder="Adresinizi girin" required>
-                            <span asp-validation-for="Order.Address" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6">
-                                <label asp-for="Order.CardNo" class="form-label bi bi-credit-card" style="color: #7AACC2; font-weight: bold;"> Kart Numarası</label>
-                            <input asp-for="Order.CardNo" id="Order_CardNo" class="form-control" type="text" pattern="[0-9]{16}" maxlength="16" placeholder="16 Haneli Kredi kartı numaranızı girin" required>
-                            <span asp-validation-for="Order.CardNo" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="Order.CVV" class="form-label bi bi-credit-card-2-back" style="color: #7AACC2; font-weight: bold;"> CVV</label>
-                            <input asp-for="Order.CVV" id="Order_CVV" class="form-control" type="text" pattern="[0-9]{3}" maxlength="3" placeholder="3 Haneli CVV numaranızı girin" required>
-                            <span asp-validation-for="Order.CVV" class="text-danger"></span>
-                        </div>
-                        <div class="col-12 ">
-                            <button type="submit" class="btn btn-lg btn-primary bi bi-bag-check-fill"> Satın Al</button>
+        <form asp-action="OrderResult" id="orderForm" style="display:none;">
+            <div class="container mt-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #7AACC2; margin-bottom: 20px; font-weight: bold;">Bilgilerinizi Giriniz</h3>
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <input type="hidden" id="orderDetailInput" name="Order.OrderDetail" />
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Order.Name" class="form-label" style="color: #7AACC2; font-weight: bold;"><i class="bi bi-person-fill"></i> Ad</label>
+                                <input asp-for="Order.Name" id="Order_Name" type="text" class="form-control" required>
+                                <span asp-validation-for="Order.Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Order.Surname" class="form-label" style="color: #7AACC2; font-weight: bold;"><i class="bi bi-person-fill"></i> Soyad</label>
+                                <input asp-for="Order.Surname" id="Order_Surname" type="text" class="form-control" required>
+                                <span asp-validation-for="Order.Surname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Order.Phone" class="form-label" style="color: #7AACC2; font-weight: bold;"><i class="bi bi-telephone-fill"></i> Telefon</label>
+                                <input asp-for="Order.Phone" id="Order_Phone" type="tel" required class="form-control" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" placeholder="Telefon Numarası (örn: 555-555-5555)" title="Telefon numaranızı bu formatta giriniz: 555-555-5555">
+                                <span asp-validation-for="Order.Phone" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Order.Email" class="form-label" style="color: #7AACC2; font-weight: bold;"><i class="bi bi-envelope-fill"></i> E-Mail</label>
+                                <input asp-for="Order.Email" id="Order_Email" type="email" class="form-control" placeholder="E-posta adresinizi girin" required>
+                                <span asp-validation-for="Order.Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Order.Address" class="form-label" style="color: #7AACC2; font-weight: bold;"><i class="bi bi-geo-fill"></i> Adres</label>
+                                <input asp-for="Order.Address" id="Order_Address" type="text" class="form-control" placeholder="Adresinizi girin" required>
+                                <span asp-validation-for="Order.Address" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Order.CardNo" class="form-label" style="color: #7AACC2; font-weight: bold;"><i class="bi bi-credit-card-fill"></i> Kart Numarası</label>
+                                <input asp-for="Order.CardNo" id="Order_CardNo" class="form-control" type="text" pattern="[0-9]{16}" maxlength="16" placeholder="16 Haneli Kredi kartı numaranızı girin" required>
+                                <span asp-validation-for="Order.CardNo" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Order.CVV" class="form-label" style="color: #7AACC2; font-weight: bold;"><i class="bi bi-shield-lock-fill"></i> CVV</label>
+                                <input asp-for="Order.CVV" id="Order_CVV" class="form-control" type="text" pattern="[0-9]{3}" maxlength="3" placeholder="3 Haneli CVV numaranızı girin" required>
+                                <span asp-validation-for="Order.CVV" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-lg btn-primary"><i class="bi bi-cart-fill"></i> Satın Al</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+
 
 
             
@@ -148,7 +170,9 @@
 <br />
 <br />
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
     // Sepeti Onayla butonunu göster veya gizle
     var confirmCartButton = document.getElementById("confirmCartButton");
     if (confirmCartButton) {
@@ -197,6 +221,38 @@
     });
 </script>
 <style>
+    .sepet-body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 50px;
+    }
+
+    .sepet-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .sepet-h1 {
+        color: #7AACC2;
+    }
+
+    .sepet-buton {
+        display: inline-block;
+        background-color: #7AACC2;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+        .sepet-buton:hover {
+            background-color: #333;
+        }
     .card{
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

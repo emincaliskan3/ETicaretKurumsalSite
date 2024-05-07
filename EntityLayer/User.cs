@@ -17,9 +17,9 @@ namespace EntityLayer
         public string Password { get; set; }
         [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)]
         public DateTime? CreateDate { get; set; } = DateTime.Now;
-        [Display(Name = "Durum")]
-        public bool IsActive { get; set; }
         [Display(Name = "Admin")]
+        public bool IsActive { get; set; }
+        [Display(Name = "Super Admin")]
         public bool IsAdmin { get; set; }
         //JWT property
         public string? UserGuid { get; set; } = Guid.NewGuid().ToString();

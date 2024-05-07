@@ -2,7 +2,6 @@
 using EntityLayer;
 using ETicaretKurumsalSite.ExtensionMethods;
 using ETicaretKurumsalSite.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer;
 

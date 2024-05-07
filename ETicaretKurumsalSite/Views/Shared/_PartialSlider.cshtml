@@ -1,56 +1,39 @@
 ﻿@model IEnumerable<Slide>
+
 <section id="billboard" class="position-relative overflow-hidden bg-light-blue">
     <div class="swiper main-swiper swiper-initialized swiper-horizontal swiper-backface-hidden">
         <div class="swiper-wrapper" id="swiper-wrapper-defd342c0e721066b" aria-live="polite">
             @foreach (var item in Model)
-                {
-            <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 2" _mstaria-label="15197" _msthash="28" style="width: 1473px;">
-                <div class="container">
-
-                    <div class="row d-flex align-items-center">
-                        <div class="col-md-6">
-                            <div class="banner-content">
-                                <h1 class="display-2 text-uppercase text-dark pb-5" _msttexthash="396045" _msthash="29">@item.Title</h1>
-                                <a asp-controller="Products" asp-action="Index" class="btn btn-medium btn-dark text-uppercase btn-rounded-none" _msttexthash="308711" _msthash="30">Ürün Mağazası</a>
+            {
+                <div class="swiper-slide" style="width: 100%;">
+                    <div class="container">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-md-6">
+                                <div class="banner-content">
+                                    <h1 class="display-2 text-uppercase text-dark pb-5">@item.Title</h1>
+                                    <a asp-controller="Products" asp-action="Index" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">Ürün Mağazası</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="image-holder">
-                                <img src="~/Images/@item.Image" alt="alem" _mstalt="78403" _msthash="31">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 2" _mstaria-label="15288" _msthash="32" style="width: 1473px;">
-                <div class="container">
-                    <div class="row d-flex flex-wrap align-items-center">
-                        <div class="col-md-6">
-                            <div class="banner-content">
-                                <h1 class="display-2 text-uppercase text-dark pb-5" _msttexthash="915746" _msthash="33">HAYAL ETTIGINIZDEN FAZLASI</h1>
-                                <a asp-controller="Products" asp-action="Index" class="btn btn-medium btn-dark text-uppercase btn-rounded-none" _msttexthash="308711" _msthash="34">Ürün Mağazası</a>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="image-holder">
-                                <img src="~/ministore-1.0.0/images/single-image1.png" alt="alem" _mstalt="78403" _msthash="35">
+                            <div class="col-md-6">
+                                <div class="image-holder">
+                                    <img src="~/Images/@item.Image" alt="alem">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
         </div>
-        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+        <div class="swiper-icon swiper-arrow swiper-arrow-prev" tabindex="0" role="button" aria-label="Sonraki slayt">
+            <svg class="chevron-left">
+                <use xlink:href="#chevron-left"></use>
+            </svg>
+        </div>
+        <div class="swiper-icon swiper-arrow swiper-arrow-next" tabindex="0" role="button" aria-label="Önceki slayt">
+            <svg class="chevron-right">
+                <use xlink:href="#chevron-right"></use>
+            </svg>
+        </div>
     </div>
-    <div class="swiper-icon swiper-arrow swiper-arrow-prev" tabindex="0" role="button" aria-label="Sonraki slayt" aria-controls="swiper-wrapper-866f13ca9ba14e4e" aria-disabled="false" _mstaria-label="135655" _msthash="36">
-        <svg class="chevron-left">
-            <use xlink:href="#chevron-left"></use>
-        </svg>
-    </div>
-    <div class="swiper-icon swiper-arrow swiper-arrow-next" tabindex="0" role="button" aria-label="Önceki slayt" aria-controls="swiper-wrapper-866f13ca9ba14e4e" aria-disabled="true" _mstaria-label="235768" _msthash="37">
-        <svg class="chevron-right">
-            <use xlink:href="#chevron-right"></use>
-        </svg>
-    </div>
+    <div class="swiper-notification" aria-live="assertive" aria-atomic="true"></div>
 </section>
